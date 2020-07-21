@@ -1,0 +1,5 @@
+[[process]]
+name = "davichete-page" # Required, the name of the process. Shown in list.
+cmd = "cargo" # The actual command to launch, must be the command without arguments
+args = [["run"]]  # Optional, must be an array of array
+max_retries = 10 # Optional, defaults to 0
