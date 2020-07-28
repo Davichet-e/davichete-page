@@ -1,0 +1,94 @@
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+}
+
+/* Image related */
+.img-container {
+  /* position: relative; */
+  text-align: center;
+}
+
+.img-title {
+  font-size: 60px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.title-name {
+  color: teal;
+}
+
+.attr-a {
+  margin-left: 5px;
+  position: absolute;
+  left: 0;
+  bottom: 10px;
+  font-size: 10px;
+}
+
+.img-bg {
+  object-fit: cover;
+  width: 100%;
+  border-width: 0 0 5px 0;
+  border-style: solid;
+  border-color: teal;
+}
+
+a {
+  color: darkslategray;
+}
+
+p {
+  margin-left: 20px;
+  font-size: 500px;
+}
+
+/* Navbar related */
+.navbar {
+  z-index: 1;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%;
+  margin-right: 40px;
+  font-size: large;
+}
+
+.navbar-list {
+  margin: 0 0 0 0px;
+  height: 3em;
+  text-align: center;
+  background-color: whitesmoke;
+  width: 100%;
+  display: flex;
+}
+
+.navbar-item {
+  margin: 0 10px;
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.navbar-item:last-child {
+  margin-right: 20px;
+}
+
+.name {
+  margin-right: auto;
+}
+
+.skills-title {
+  text-align: center;
+}
