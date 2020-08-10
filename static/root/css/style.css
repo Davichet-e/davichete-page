@@ -12,6 +12,10 @@ body {
   margin: 0;
 }
 
+img {
+  margin: 0;
+}
+
 /* Image related */
 .img-container {
   /* position: relative; */
@@ -44,6 +48,7 @@ body {
   border-width: 0 0 5px 0;
   border-style: solid;
   border-color: teal;
+  height: 100vh;
 }
 
 a {
@@ -51,8 +56,9 @@ a {
 }
 
 p {
-  margin-left: 20px;
-  font-size: 500px;
+  padding: 0;
+  font-size: 25px;
+  line-height: 1.5;
 }
 
 /* Navbar related */
@@ -66,7 +72,7 @@ p {
 }
 
 .navbar-list {
-  margin: 0 0 0 0px;
+  margin: 0;
   height: 3em;
   text-align: center;
   background-color: whitesmoke;
@@ -89,6 +95,68 @@ p {
   margin-right: auto;
 }
 
-.skills-title {
+.section-title {
   text-align: center;
+  font-size: 50px;
+}
+
+.skills-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.skills-container > [class^="skill"] {
+  text-align: center;
+  flex: 0 1 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 100px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  background-color: rgb(216, 216, 216);
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+[class^="progress-bar-"]:not([class$="container"]) {
+  width: 0;
+}
+
+.progress-bar-container > div {
+  height: 10px;
+  background-color: rgb(82, 86, 141);
+  border-radius: inherit;
+}
+
+.skill-img {
+  height: 100px;
+  margin-bottom: 20px;
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+section {
+  /* min-width: 875px; */
+  margin: 0 25px;
+  max-width: 780px;
+  border-width: 0 0 5px 0;
+  border-style: solid;
+  border-color: teal;
+}
+
+[class^="project-title"] {
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.badge {
+  vertical-align: middle;
 }

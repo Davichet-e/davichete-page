@@ -3,7 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Davichet-e website" />
     <link rel="stylesheet" href="css/style.css" />
+    <script defer src="js/index.js"></script>
+
     <title>Davichete</title>
   </head>
   <body>
@@ -20,7 +23,7 @@
     <div class="img-container">
       <img
         class="img-bg"
-        src="/images/Hexagon-dotted-connect-line-background.svg"
+        src="../images/Hexagon-dotted-connect-line-background.svg"
         alt="background"
       />
       <a class="attr-a" href="https://www.vecteezy.com/free-vector/background"
@@ -31,9 +34,121 @@
         <a href="#skills">My Skills</a>
       </h2>
     </div>
-    <section id="skills"><h3 class="skills-title">My Skills</h3></section>
-
-    <p></p>
-    <script src="js/index.js"></script>
+    <div id="content">
+      <section class="about">
+        <h3 class="section-title">About me</h3>
+        <p>
+          I'm David, a spanish software developer currently studying a CS
+          degree. I'm mainly interested in AI and software engineering, but in
+          general I love writing any kind of software, especially any scripting
+          task or collaborating with Open Source projects.
+        </p>
+        <p>
+          My main language is Python, but my language of preference is Rust. I
+          love learning new programming languages, I feel comfortable writing in
+          Python, Rust, Java, C#, TS/JS and C. I've some experience with both
+          Frontend and Backend.
+        </p>
+        <p>
+          I'm a passionate on History, I love reading about any Mythology
+          especially Greek one. I love reading and debating about anything,
+          "Zoon Politikon" we are.
+        </p>
+        <p>
+          About music, I'm kind of a variate person; I listen a lot of
+          experimental music like Tundra, but I also enjoy Rock or Jazz music.
+        </p>
+      </section>
+      <section class="skills">
+        <h3 class="section-title">My Skills</h3>
+        <div class="skills-container">
+          <div class="skill1">
+            <figure>
+              <img
+                class="skill-img"
+                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2Fthumb%2Fc%2Fc3%2FPython-logo-notext.svg%2F1200px-Python-logo-notext.svg.png&f=1&nofb=1"
+                alt="xie huao piao piao"
+              />
+              <figcaption>Python</figcaption>
+            </figure>
+            <div class="progress-bar-container">
+              <div class="progress-bar-1"></div>
+            </div>
+          </div>
+          <div class="skill2">
+            <figure>
+              <img
+                class="skill-img"
+                src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.Gb4cF0N1maMAYEO1iyroMgHaHa%26pid%3DApi&f=1"
+                alt="Python logo"
+              />
+              <figcaption>Rust</figcaption>
+            </figure>
+            <div class="progress-bar-container">
+              <div class="progress-bar-2"></div>
+            </div>
+          </div>
+          <div class="skill3">
+            <figure>
+              <img
+                class="skill-img"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/1200px-Vue.js_Logo_2.svg.png"
+                alt="Rust logo"
+              />
+              <figcaption>Vue</figcaption>
+            </figure>
+            <div class="progress-bar-container">
+              <div class="progress-bar-3"></div>
+            </div>
+          </div>
+          <div class="skill4">
+            <figure>
+              <img
+                class="skill-img"
+                src="https://geo-python.github.io/2017/_images/pandas_logo.png"
+                alt="Pandas logo"
+              />
+              <figcaption>Pandas</figcaption>
+            </figure>
+            <div class="progress-bar-container">
+              <div class="progress-bar-4"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="projects">
+        <h3 class="section-title">What I have done</h3>
+        <div class="project-container">
+          <h5 class="project-title-gb">
+            Grouping-by
+            <a href="https://crates.io/crates/grouping-by">
+              <img
+                class="badge"
+                src="https://img.shields.io/crates/v/grouping-by.svg"
+                alt="crates.io"
+              />
+            </a>
+          </h5>
+          <p>
+            Grouping-by is a small library written in Rust which allows users to
+            group their iterators on various ways. It tries to simulate the
+            functionality of Java's <code>GroupingBy</code> Collector
+          </p>
+          <img
+            class="grouping-by-example"
+            src="images/grouping-by.png"
+            alt="grouping-by example"
+          />
+        </div>
+        <div class="project-container">
+          <h5 class="project-title-">BlackJack</h5>
+          <p>
+            A command-line application to play a professional multiplayer
+            BlackJack (hand splitting, doubling...), written in 5 different
+            languages (Python, Rust, Typescript, C#, Java)
+          </p>
+        </div>
+      </section>
+    </div>
   </body>
 </html>
