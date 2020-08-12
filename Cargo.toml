@@ -10,3 +10,5 @@ edition = "2018"
 actix-web = "2.0.0"
 actix-files = "0.2.1"
 actix-rt = "1.0.0"
+openssl = "*"
+rae-rust = { path="C:/Users/David/Dropbox/Proyectos VSCode/Rust Projects/rae-rust" }
