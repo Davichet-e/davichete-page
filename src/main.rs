@@ -1,26 +1,33 @@
 use actix_files::Files;
-use actix_web::{client, web, App, HttpRequest, HttpServer, Responder};
-use openssl::ssl::{SslConector, SslMethod};
+use actix_web::{client::{Connector, Client}, web, App, HttpRequest, HttpServer, Responder, Error as ActixError};
+use openssl::ssl::{SslConnector, SslMethod};
 
-async fn api_rae(req: HttpRequest) -> impl Responder {
+async fn api_rae(req: HttpRequest) -> impl Responder { 
     // Create request builder and send request
     let name = req.match_info().get("word").unwrap_or("World");
     let builder = SslConnector::builder(SslMethod::tls()).unwrap();
 
-    let client = client::Client::build()
+    let client = Client::build()
         .connector(Connector::new().ssl(builder.build()).finish())
         .finish();
-    let response = client
+
+    let mut response = client
         .get("https://dle.rae.es/".to_owned() + name)
-        .header("User-Agent", "actix-web/3.0")
         .send() // <- Send request
-        .await; // <- Wait for response
-    let foo = response.unwrap().body().await.unwrap();
-    println!(
-        "{:?}",
-        rae_rust::search(name, std::str::from_utf8(&foo).unwrap())
-    );
-    format!("Hello {}!", &name)
+        .await  // <- Wait for response
+        .unwrap();
+
+    if response.status().as_u16() == 301 {    
+        response = client
+            .get("https://dle.rae.es".to_owned() + response.headers().get("location").unwrap().to_str().unwrap())
+            .send() // <- Send request
+            .await // <- Wait for response
+            .unwrap();     
+    }
+    let body = response.body().await.unwrap();
+    let map = rae_rust::search(name, std::str::from_utf8(&body).unwrap()).unwrap();
+
+    Ok::<_, ActixError>(web::Json(map))
 }
 
 #[actix_rt::main]
