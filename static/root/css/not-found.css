@@ -1,0 +1,28 @@
+body {
+  color: #333;
+  font-family: "Fira Sans", Helvetica, Arial, sans-serif;
+}
+
+a, a:visited {
+  color: teal;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #303030;
+    color: #ddd;
+  }
+  
+  a, a:visited {
+    color: rgb(214, 36, 36);
+  }
+}
+
+main {
+  height: 95vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
