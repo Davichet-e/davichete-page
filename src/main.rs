@@ -7,7 +7,7 @@ async fn api_rae(req: HttpRequest) -> impl Responder {
     let name = req.match_info().get("word").unwrap_or("World");
     let builder = SslConnector::builder(SslMethod::tls()).unwrap();
 
-    let client = Client::build()
+    let client = Client::builder()
         .connector(Connector::new().ssl(builder.build()).finish())
         .finish();
 
@@ -31,13 +31,18 @@ async fn api_rae(req: HttpRequest) -> impl Responder {
     Ok::<_, ActixError>(web::Json(map))
 }
 
-fn not_found(r: HttpRequest) -> HttpResponse {
-    NamedFile::open("./static/root/html/notfound.html".parse::<std::path::PathBuf>().expect("Failed to parse path")).unwrap().set_status_code("404".parse().unwrap()).into_response(&r).unwrap()
+fn not_found(req: HttpRequest) -> HttpResponse {
+    let path: std::path::PathBuf = "./static/root/html/notfound.html".parse()
+        .expect("Failed to parse path");
+    let namedfile = NamedFile::open(path).expect("Failed to create NamedFile");
+    namedfile
+        .set_status_code("404".parse().unwrap())
+        .into_response(&req)
+        .expect("Failed to convert to response")
 }
 
-#[actix_rt::main]
+#[actix_web::main]
 async fn main() -> std::io::Result<()> {
-println!("{:?}", std::fs::canonicalize(&std::path::PathBuf::from("./")));
     let addr = "127.0.0.1:8080";
     println!("Running on http://{}", &addr);
     HttpServer::new(|| {
