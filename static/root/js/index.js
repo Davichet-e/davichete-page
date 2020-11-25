@@ -20,11 +20,18 @@ function changeImages(condition) {
 function setImagesDarkMode() {
   changeImages(mediaDark.matches)
 }
-
-mediaDark.addEventListener('change', event => {
-  changeImages(event.matches)
+// Check if it is Safari, see https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList
+if (mediaDark.addEventListener)
+  mediaDark.addEventListener('change', event => {
+    changeImages(event.matches)
 });
-
+else {
+  mediaDark.addListener(event => {
+    changeImages(event.matches)
+});
+  // WebP it is not supported by Safari yet.
+  document.querySelector(".img-container").style.backgroundImage = "url(\"../images/background-safari.png\")"
+}
 window.addEventListener("load", setImagesDarkMode, { once: true })
 
 const progressBarContainer = document.querySelectorAll('.progress-bar-container > *')
@@ -69,7 +76,6 @@ function isOnScreen(element) {
 
 window.addEventListener("scroll", animateProgressBar);
 
-
 /**
  * @TODO
  * @param {Event} event 
@@ -82,3 +88,4 @@ function contact(event) {
   console.log(name, email, message);
   return false;
 }
+

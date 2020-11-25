@@ -77,6 +77,7 @@ section {
 /* Image related */
 .img-container {
   background-image: var(--image-path);
+  background-image: image-set(url("../images/background-safari.png"));
   background-size: cover;
   background-clip: content-box;
   text-align: center;
@@ -443,6 +444,10 @@ button {
   border-radius: 10px;
   color: #ddd;
   background-color: var(--main-color);
+}
+
+button:disabled {
+  background-color: grey;
 }
 
 @media (prefers-color-scheme: dark) {
