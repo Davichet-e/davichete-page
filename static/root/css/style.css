@@ -55,7 +55,9 @@ a:hover {
   border-bottom-style: dashed;
 }
 
-
+.blog {
+  color: grey;
+}
 
 p {
   padding: 0 25px;
