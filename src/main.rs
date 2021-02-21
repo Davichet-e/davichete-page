@@ -29,12 +29,12 @@ async fn api_rae(req: HttpRequest) -> impl Responder {
         response = client
             .get(
                 "https://dle.rae.es".to_owned()
-                    + &utf8_percent_encode(std::str::from_utf8(response
-                        .headers()
-                        .get("location")
-                        .unwrap()
-                        .as_bytes())
-                        .unwrap(), FRAGMENT).collect::<String>()
+                    + &utf8_percent_encode(
+                        std::str::from_utf8(response.headers().get("location").unwrap().as_bytes())
+                            .unwrap(),
+                        FRAGMENT,
+                    )
+                    .collect::<String>(),
             )
             .send() // <- Send request
             .await // <- Wait for response
@@ -55,7 +55,11 @@ async fn api_rae(req: HttpRequest) -> impl Responder {
             map
         }
         Err(rae_rust::WebScrapError::Other(word)) => {
-            let mut response = make_request_rae(&utf8_percent_encode(&word, FRAGMENT).collect::<String>(), &client).await;
+            let mut response = make_request_rae(
+                &utf8_percent_encode(&word, FRAGMENT).collect::<String>(),
+                &client,
+            )
+            .await;
             let body = response.body().await.unwrap();
 
             rae_rust::search(std::str::from_utf8(&body).expect("Failed to parse body")).unwrap()
@@ -95,7 +99,6 @@ fn not_found(req: HttpRequest) -> HttpResponse {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let addr = "127.0.0.1:8080";
-    println!("Running on http://{}", &addr);
     HttpServer::new(|| {
         App::new()
             .route("/rae/v1/{word}", web::get().to(api_rae))
