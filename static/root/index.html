@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Davichet-e website" />
+  <meta name="yandex-verification" content="a4c581ee7596bebd" />
   <link rel="stylesheet" href="css/style.css" />
   <script defer src=" js/index.js"></script>
 
@@ -36,7 +37,7 @@
     </a>
   </div>
   <div id="content">
-    <section id="about">
+    <main id="about">
       <h3 class="section-title">About me</h3>
       <p>
         I'm David, a spanish software developer currently studying a CS
@@ -64,7 +65,7 @@
         I'm a passionate on <b>History</b>, I love reading about any <b>Mythology</b>
         especially <b>Greek</b> one. I love learning new things, I enjoy reading and studying in general. 
       </p>
-    </section>
+    </main>
     <section id="skills">
       <h3 class="section-title">My Skills</h3>
       <div class="skills-container">
@@ -184,8 +185,7 @@
 
             </div>
             <div class="gist-meta">
-              <a href="https://gist.github.com/Davichet-e/cbf8a203aa84b852a78a3611131d3749/raw/159fa7f1d3872ac673e8f28e6887f7a1b0c938d1/grouping-by.rs"
-                style="float:right">view raw</a>
+              <a href="https://gist.github.com/Davichet-e/cbf8a203aa84b852a78a3611131d3749/raw/159fa7f1d3872ac673e8f28e6887f7a1b0c938d1/grouping-by.rs" style="float: right;">view raw</a>
               <a
                 href="https://gist.github.com/Davichet-e/cbf8a203aa84b852a78a3611131d3749#file-grouping-by-rs">grouping-by.rs</a>
               hosted with &#10084; by <a href="https://github.com">GitHub</a>
@@ -256,17 +256,17 @@
       <h3 class="section-title">Contact me</h3>
       <form class="contact-form" onsubmit="contact(event)">
         <div class="input-container">
-          <input id="name" placeholder="Name" name="name" required />
+          <input id="name" placeholder="Name" name="name" required disabled />
           <label for="name" class="input-label">Name</label>
         </div>
 
         <div class="input-container">
-          <input id="email" type="email" placeholder="Name" name="name" required />
+          <input id="email" type="email" placeholder="Name" name="name" required disabled />
           <label for="email" class="input-label" type="email">Email</label>
         </div>
 
         <label for="message">Message</label>
-        <textarea id="message"></textarea>
+        <textarea id="message" disabled></textarea>
 
         <button disabled type="submit" title="Not implemented (yet)!">Contact</button>
       </form>

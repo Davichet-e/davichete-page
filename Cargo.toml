@@ -8,7 +8,6 @@ edition = "2018"
 
 [dependencies]
 actix-web = { version="^3.0.0", features = ["openssl"] }
-actix-files = "^0.3.0"
 percent-encoding = "2.1.0"
 openssl = "^0.10.30"
 rae-rust = { git = "https://github.com/Davichet-e/RAE-API-Rust", branch = "davichete-page" }

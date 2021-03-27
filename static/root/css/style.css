@@ -65,7 +65,7 @@ p {
   word-break: break-word;
 }
 
-section {
+section, main {
   max-width: 780px;
   border-width: 0 0 5px 0;
   border-style: solid;
@@ -430,6 +430,7 @@ label[for="message"] {
 textarea {
   font: unset;
   font-size: 1.2rem
+  resize: none;
 }
 
 input:placeholder-shown {
