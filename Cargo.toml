@@ -7,7 +7,9 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = { version="^3.0.0", features = ["openssl"] }
-percent-encoding = "2.1.0"
-openssl = "^0.10.30"
-rae-rust = { git = "https://github.com/Davichet-e/RAE-API-Rust", branch = "davichete-page" }
+actix-web = "4.0"
+awc = { version = "3.0", features = ["openssl"] }
+openssl = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+lettre = "0.9"
+lettre_email = "0.9"

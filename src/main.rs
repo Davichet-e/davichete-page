@@ -1,85 +1,109 @@
-use actix_web::{
-    client::{Client, ClientResponse, Connector},
-    dev::{Decompress, Payload},
-    middleware, web, App, Error as ActixError, HttpRequest, HttpServer, Responder,
-};
-use openssl::ssl::{SslConnector, SslMethod};
-use percent_encoding::{utf8_percent_encode, AsciiSet, CONTROLS};
-use std::collections::BTreeMap;
+use actix_web::{middleware, web, App, HttpResponse, HttpResponseBuilder, HttpServer, Responder};
+use awc::Client;
+use lettre::smtp::authentication::Credentials;
+use lettre::{smtp::error::SmtpResult, SmtpClient, SmtpTransport, Transport};
+use lettre_email::EmailBuilder;
+use serde::{Deserialize, Serialize};
+use std::env;
 
-async fn api_rae(req: HttpRequest) -> impl Responder {
-    /// https://url.spec.whatwg.org/#fragment-percent-encode-set
-    const FRAGMENT: &AsciiSet = &CONTROLS.add(b' ').add(b'"').add(b'<').add(b'>').add(b'`');
-
-    let name = req.match_info().get("word").unwrap();
-
-    // https://en.wikipedia.org/wiki/Percent-encoding
-    let name: &str = &utf8_percent_encode(name, FRAGMENT).to_string();
-    let ssl_connector = SslConnector::builder(SslMethod::tls()).unwrap().build();
-
-    // Create request builder and send request
-    let client = Client::builder()
-        .connector(Connector::new().ssl(ssl_connector).finish())
-        .finish();
-
-    let mut response = make_request_rae(name, &client).await;
-
-    if response.status().as_u16() == 301 {
-        response = make_request_rae(
-            &utf8_percent_encode(
-                response
-                    .headers()
-                    .get("location")
-                    .and_then(|location| std::str::from_utf8(location.as_bytes()).ok())
-                    .unwrap(),
-                FRAGMENT,
-            )
-            .to_string()[1..],
-            &client,
-        )
-        .await;
-    }
-
-    let body = response.body().await.unwrap();
-
-    let result_rae = rae_rust::search(std::str::from_utf8(&body).expect("Failed to parse body"));
-
-    let meanings = match result_rae {
-        Ok(map) => map,
-        Err(rae_rust::WebScrapError::ParseError(_)) => {
-            let mut map: BTreeMap<String, rae_rust::ValueVariant> = BTreeMap::new();
-            map.insert(
-                String::from("Error"),
-                rae_rust::ValueVariant::String(String::from("Error processing the request")),
-            );
-            map
-        }
-        Err(rae_rust::WebScrapError::Other(word)) => {
-            let mut response =
-                make_request_rae(&utf8_percent_encode(&word, FRAGMENT).to_string(), &client).await;
-            let body = response.body().await.unwrap();
-
-            rae_rust::search(std::str::from_utf8(&body).expect("Failed to parse body")).unwrap()
-        }
-        Err(rae_rust::WebScrapError::NotFound) => {
-            let mut map: BTreeMap<String, rae_rust::ValueVariant> = BTreeMap::new();
-            map.insert(
-                String::from("Error"),
-                rae_rust::ValueVariant::String(String::from("Word not found")),
-            );
-            map
-        }
-    };
-
-    Ok::<_, ActixError>(web::Json(meanings))
+#[derive(Deserialize)]
+struct Message {
+    name: String,
+    email: String,
+    message: String,
+    #[serde(rename = "h-captcha-response")]
+    h_captcha: String,
 }
 
-async fn make_request_rae(word: &str, client: &Client) -> ClientResponse<Decompress<Payload>> {
-    client
-        .get("https://dle.rae.es/".to_owned() + word)
-        .send() // <- Send request
-        .await // <- Wait for response
+#[derive(Serialize)]
+struct HCaptchaPayload {
+    response: String,
+    secret: String,
+}
+
+#[derive(Deserialize)]
+struct HCaptchaResponse {
+    success: bool,
+}
+
+struct EmailInformation {
+    username: String,
+    password: String,
+}
+
+async fn is_captcha_valid(payload: &HCaptchaPayload) -> Result<bool, HttpResponseBuilder> {
+    let client = Client::default();
+    let response = client
+        .post("https://hcaptcha.com/siteverify")
+        .send_form(payload)
+        .await;
+
+    let response = match response {
+        Ok(mut content) => content.json::<HCaptchaResponse>().await,
+        _ => return Err(HttpResponse::Unauthorized()),
+    };
+
+    if let Ok(h_captcha_response) = response {
+        Ok(h_captcha_response.success)
+    } else {
+        Err(HttpResponse::InternalServerError())
+    }
+}
+
+fn get_email_information() -> Option<EmailInformation> {
+    match (env::var("EMAIL_USERNAME"), env::var("EMAIL_PASSWORD")) {
+        (Ok(username), Ok(password)) => Some(EmailInformation { username, password }),
+        _ => None,
+    }
+}
+async fn send_email(message: &Message, email_information: EmailInformation) -> SmtpResult {
+    let email = EmailBuilder::new()
+        .to("davidgmorillop@gmail.com")
+        .from((&email_information.username, &message.name))
+        .subject(&format!("Email from `{}`", message.email))
+        .text(&message.message)
+        .build()
         .unwrap()
+        .into();
+
+    let creds = Credentials::new(email_information.username, email_information.password);
+
+    let mut mailer = SmtpTransport::new(
+        SmtpClient::new_simple("smtp.eu.mailgun.org")
+            .unwrap()
+            .credentials(creds),
+    );
+    mailer.send(email)
+}
+
+async fn contact(info: web::Json<Message>) -> impl Responder {
+    let h_captcha_secret = match env::var("H_CAPTCHA_SECRET") {
+        Ok(secret) => secret,
+        _ => return HttpResponse::InternalServerError(),
+    };
+    let h_captcha_payload = HCaptchaPayload {
+        response: info.h_captcha.clone(),
+        secret: h_captcha_secret,
+    };
+    let captcha_is_valid = match is_captcha_valid(&h_captcha_payload).await {
+        Ok(is_valid) => is_valid,
+        Err(error) => return error,
+    };
+
+    if !captcha_is_valid {
+        return HttpResponse::Unauthorized();
+    }
+    let email_information = match get_email_information() {
+        Some(info) => info,
+        _ => return HttpResponse::InternalServerError(),
+    };
+    let result = send_email(&info, email_information).await;
+
+    if result.is_ok() {
+        HttpResponse::Created()
+    } else {
+        HttpResponse::Unauthorized()
+    }
 }
 
 #[actix_web::main]
@@ -87,12 +111,9 @@ async fn main() -> std::io::Result<()> {
     let addr = "127.0.0.1:8080";
     HttpServer::new(|| {
         App::new()
-            .wrap(middleware::NormalizePath::new(
-                middleware::normalize::TrailingSlash::Trim,
-            ))
-            .route("/rae/v1/{word}", web::get().to(api_rae))
+            .wrap(middleware::NormalizePath::trim())
+            .route("/contact", web::post().to(contact))
     })
-    // Create request builder and send request
     .bind(addr)?
     .run()
     .await
