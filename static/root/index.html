@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="css/style.css" />
 
   <script defer src="js/index.js"></script>
-  <script defer src="https://newassets.hcaptcha.com/captcha/v1/364e801/hcaptcha.js?hl=en"></script>
+  <script defer src="https://js.hcaptcha.com/1/api.js?hl=en"></script>
 
   <title>Davichete</title>
 </head>
@@ -267,63 +267,7 @@
           <b>group their iterators</b> in various ways. It tries to simulate the
           functionality of Java's <code>GroupingBy</code> Collector
         </p>
-        <div id="gist104930758" class="gist">
-          <div class="gist-file">
-            <div class="gist-data">
-              <div class="js-gist-file-update-container js-task-list-container file-box">
-                <div id="file-grouping-by-rs" class="file ">
-
-
-                  <div itemprop="text" class="Box-body p-0 blob-wrapper data type-rust  ">
-
-                    <table class="highlight tab-size js-file-line-container" data-tab-size="8" data-paste-markdown-skip>
-                      <tr>
-                        <td id="file-grouping-by-rs-L1" class="blob-num js-line-number" data-line-number="1"></td>
-                        <td id="file-grouping-by-rs-LC1" class="blob-code blob-code-inner js-file-line"><span
-                            class="pl-c">// This returns for each year, the contract with the most days.</span></td>
-                      </tr>
-                      <tr>
-                        <td id="file-grouping-by-rs-L2" class="blob-num js-line-number" data-line-number="2"></td>
-                        <td id="file-grouping-by-rs-LC2" class="blob-code blob-code-inner js-file-line">contracts.<span
-                            class="pl-en">iter</span>().<span class="pl-en">grouping_by_max</span>(</td>
-                      </tr>
-                      <tr>
-                        <td id="file-grouping-by-rs-L3" class="blob-num js-line-number" data-line-number="3"></td>
-                        <td id="file-grouping-by-rs-LC3" class="blob-code blob-code-inner js-file-line"> <span
-                            class="pl-k">|</span>contract<span class="pl-k">|</span> contract.date.<span
-                            class="pl-en">year</span>(), <span class="pl-c">// Key of HashMap</span></td>
-                      </tr>
-                      <tr>
-                        <td id="file-grouping-by-rs-L4" class="blob-num js-line-number" data-line-number="4"></td>
-                        <td id="file-grouping-by-rs-LC4" class="blob-code blob-code-inner js-file-line"> <span
-                            class="pl-k">|</span>contract1, contract2<span class="pl-k">|</span> contract1.days.<span
-                            class="pl-en">cmp</span>(<span class="pl-k">&amp;</span>contract2.days), <span
-                            class="pl-c">// Comparator to get the max</span></td>
-                      </tr>
-                      <tr>
-                        <td id="file-grouping-by-rs-L5" class="blob-num js-line-number" data-line-number="5"></td>
-                        <td id="file-grouping-by-rs-LC5" class="blob-code blob-code-inner js-file-line">) <span
-                            class="pl-c">// Returns `HashMap&lt;i32, Contract&gt;`</span></td>
-                      </tr>
-                    </table>
-
-
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-            <div class="gist-meta">
-              <a href="https://gist.github.com/Davichet-e/cbf8a203aa84b852a78a3611131d3749/raw/159fa7f1d3872ac673e8f28e6887f7a1b0c938d1/grouping-by.rs"
-                style="float: right;">view raw</a>
-              <a
-                href="https://gist.github.com/Davichet-e/cbf8a203aa84b852a78a3611131d3749#file-grouping-by-rs">grouping-by.rs</a>
-              hosted with &#10084; by <a href="https://github.com">GitHub</a>
-            </div>
-          </div>
-        </div>
-      </div>
+        <script src="https://gist.github.com/Davichet-e/cbf8a203aa84b852a78a3611131d3749.js"></script>
       <div class="project-container">
         <h3 class="project-title-blackjack">BlackJack</h3>
         <p>
@@ -360,15 +304,6 @@
           <a href="https://github.com/Davichet-e/photo-gallery" target="_blank" rel="noopener noreferrer">webpage</a>
           emulating a gallery of photos. I got marked with honours in the
           subject. It was developed with Vue, TypeScript and Firebase (Auth, Firestore, Storage).
-        </p>
-      </div>
-      <div class="project-container">
-        <h3 class="project-title-browser-da">Data Science Browser</h3>
-        <p>
-          I developed a small program to analyse the usage of browsers over
-          time, with the <code>csv</code>s provided by
-          <a href="http://gs.statcounter.com/" target="_blank" rel="noopener noreferrer">Statcounter Global Stats</a>.
-          It has a few different plots and many functions to filter data accordingly.
         </p>
       </div>
       <div class="project-container">
@@ -414,9 +349,7 @@
       </form>
     </section>
   </div>
-
-  <link rel="stylesheet"
-    href="https://github.githubassets.com/assets/gist-embed-fd43f22140a6ad2cc9d0aa1f169a01f3.css" />
+  <link rel="stylesheet" href="https://github.githubassets.com/assets/gist-embed-c77408be8058.css">
 </body>
 
 </html>

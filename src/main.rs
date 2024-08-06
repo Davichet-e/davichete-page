@@ -24,6 +24,8 @@ struct HCaptchaPayload {
 #[derive(Deserialize)]
 struct HCaptchaResponse {
     success: bool,
+    // #[serde(default, rename = "error-codes")]
+    // error_codes: Vec<String>,
 }
 
 struct EmailInformation {
@@ -34,10 +36,9 @@ struct EmailInformation {
 async fn is_captcha_valid(payload: &HCaptchaPayload) -> Result<bool, HttpResponseBuilder> {
     let client = Client::default();
     let response = client
-        .post("https://hcaptcha.com/siteverify")
+        .post("https://api.hcaptcha.com/siteverify")
         .send_form(payload)
         .await;
-
     let response = match response {
         Ok(mut content) => content.json::<HCaptchaResponse>().await,
         _ => return Err(HttpResponse::Unauthorized()),
