@@ -1,71 +1,22 @@
-const pandasImage = document.querySelector("[alt='Pandas logo']");
+const amazonLogo = document.getElementById("amazon-logo");
 const mediaDark = window.matchMedia('(prefers-color-scheme: dark)');
 const hCaptchaDiv = document.querySelector("div.h-captcha");
 
 
 function changeImages(darkMode) {
   //hCaptchaDiv.classes  
-  pandasImage.src =
-    `https://pandas.pydata.org/static/img/pandas${darkMode ? "_white" : ""}.svg`;
+  amazonLogo.src = darkMode ? "../images/amazon-dark.png" : "../images/Amazon_icon.svg";
 }
 
 /** Check if user is in dark mode and select the according image depending on it. */
 function setImagesDarkMode() {
   changeImages(mediaDark.matches);
 }
-// Check if it is Safari, see https://developer.mozilla.org/en-US/docs/Web/API/MediaQueryList
-if (mediaDark.addEventListener) {
-  mediaDark.addEventListener('change', event => {
-    changeImages(event.matches);
-  });
-} else {
-  mediaDark.addListener(event => {
-    changeImages(event.matches);
-  });
-  // WebP it is not supported by Safari yet.
-  document.querySelector(".img-container").style.backgroundImage = "url(\"../images/background-safari.png\")";
-}
+mediaDark.addEventListener('change', event => {
+  changeImages(event.matches);
+});
 window.addEventListener("load", setImagesDarkMode, { once: true });
 
-const progressBarContainer = document.querySelectorAll('.progress-bar-container > *');
-const firstAnimated = [];
-
-const skills = [/* Python */ "100%", /* Rust */ "60%", /* Vue */ "90%", /* Pandas */ "63%"];
-
-function animateProgressBar() {
-  for (const [i, progressBarElement] of progressBarContainer.entries()) {
-    if (isOnScreen(progressBarElement)) {
-
-      const { className: progressBarClass } = progressBarElement;
-      if (!firstAnimated.includes(progressBarClass)) {
-        progressBarElement
-          .animate([{ width: "0" }, { width: skills[i] }], {
-            duration: 2500 / (i + 2),
-            direction: "normal",
-            fill: "forwards",
-          });
-        firstAnimated.push(progressBarClass);
-
-      } else {
-        if (firstAnimated.length === progressBarContainer.length) {
-          window.removeEventListener("scroll", animateProgressBar);
-        }
-      }
-    }
-  }
-}
-
-function isOnScreen(element) {
-  const docViewTop = window.scrollY;
-  const docViewBottom = docViewTop + window.innerHeight;
-
-  const elemTop = element.offsetTop;
-  const elemBottom = elemTop + element.style.height;
-
-  return elemBottom <= docViewBottom && elemTop >= docViewTop;
-}
-
-window.addEventListener("scroll", animateProgressBar);
 document.querySelector("#contact").addEventListener("reset", contact);
 
 let errorActive = false;
@@ -95,15 +46,15 @@ async function contact(event) {
     console.warn("An extension is adding an element to the form.");
     // This checks if we are picking the correct inputs
     if (nameElement.nodeName.toUpperCase() !== "INPUT" ||
-        nameElement.id !== "name") {
+      nameElement.id !== "name") {
       nameElement = document.querySelector("#name");
     }
     if (nameElement.nodeName.toUpperCase() !== "INPUT" ||
-        nameElement.id !== "email") {
+      nameElement.id !== "email") {
       emailElement = document.querySelector("#email");
     }
     if (messageElement.nodeName.toUpperCase() !== "TEXTAREA" ||
-        messageElement.id !== "message") {
+      messageElement.id !== "message") {
       messageElement = document.querySelector("#message");
     }
   }
@@ -112,7 +63,7 @@ async function contact(event) {
   const wrapSpin = document.querySelector(".wrap-spin");
   const button = document.querySelector("button");
 
-  try { 
+  try {
     wrapSpin.style.display = "flex";
     button.disabled = true;
     const response = await fetch("https://davichete.me/contact",
