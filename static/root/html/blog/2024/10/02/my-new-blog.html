@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>My new Blog</title>
+    <meta property="og:title" content="My new Blog" />
+    <meta property="og:description" content="{description}" />
+</head>
+
+<body>
+    <nav class="navbar">
+        <ul class="navbar-list">
+            <li class="name navbar-item"><a href="/blog/">Back to index</a></li>
+        </ul>
+    </nav>
+    <div id="content">
+        <h1 id="title">My new Blog</h1>
+        <section class="article-metadata"><span id="article-date">2024/10/02</span></section>
+        <main><p>Since my first years of college, I always knew I would end up building my own blog from scratch. What I didn't know, is that it would take me so long to start to do it! But finally, I've decided to stop procrastinating it and start building it.</p>
+
+
+<p>I want to make it iteratively, starting with a minimal working version, without tags, comments etc. Just plain text, just a simple markdown to html. And whenever I want/have time, keep adding features.
+</p>
+<h2>Why now?</h2>
+<p>I've recently moved to Eindhoven, in the Netherlands, and I thought it was a good time to finally finish it. It was on my drawer of <i>almost</i> done things for 2 years now
+</p>
+<h2>What will you write about?</h2>
+<p>About anything, probably most of it related to technology. I will share my views about programming languages, about the tech industry, working methodologies, etc.
+</p>
+<h2>How is this website done?</h2>
+<p>This website is written with a custom Markdown parser written in Rust, no libraries, just bare Rust code. You can find the parser I wrote <a href="https://github.com/Davichet-e/md2html" target="_blank" rel="noopener noreferrer">here</a> 
+</p>
+<h2>I have a question regarding the parser</h2>
+<p>If you have any question regarding my parser, feel free to post an issue on the repo. I'm sure I can learn a lot from your comments
+</p>
+<h2>Why not use a SSG (Static Site Generator) like <a href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> or <a href="https://www.11ty.dev/" target="_blank" rel="noopener noreferrer">11y</a></h2>
+<p>I wanted to do it on my own, I was curious about how hard would it be to write my own markdown parser. Furthermore, if I were to "waste" my time building a blog, I preferred not to fight with a tool. If I wanted to customize anything, instead of going though docs, wikis, etc. I thought it would be on the long term just easier to do it on my own and customize it to my needs.
+</main>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script nonce="date">
+        hljs.highlightAll();
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.querySelector('link[href*="highlight.js"]').remove();
+            const link = document.createElement("link");
+            link.rel = "stylesheet";
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/hybrid.min.css';
+            document.querySelector("head").append(link);
+        }
+        document.getElementById("article-date").textContent =
+            Intl.DateTimeFormat("en-GB", { month: "short", year: "numeric", day: "2-digit" })
+                .format(new Date(document.getElementById("article-date").textContent));
+    </script>
+</body>
+
+</html>
