@@ -1,8 +1,12 @@
 use actix_web::{middleware, web, App, HttpResponse, HttpResponseBuilder, HttpServer, Responder};
 use awc::Client;
-use lettre::smtp::authentication::Credentials;
-use lettre::{smtp::error::SmtpResult, SmtpClient, SmtpTransport, Transport};
-use lettre_email::EmailBuilder;
+use lettre::{
+    message::header::ContentType,
+    message::Mailbox,
+    transport::smtp::authentication::Credentials,
+    transport::smtp::{response::Response as SmtpResponse, Error as SmtpError},
+    Message as SmtpMessage, SmtpTransport, Transport,
+};
 use serde::{Deserialize, Serialize};
 use std::env;
 
@@ -29,6 +33,7 @@ struct HCaptchaResponse {
 }
 
 struct EmailInformation {
+    address: String,
     username: String,
     password: String,
 }
@@ -52,29 +57,42 @@ async fn is_captcha_valid(payload: &HCaptchaPayload) -> Result<bool, HttpRespons
 }
 
 fn get_email_information() -> Option<EmailInformation> {
-    match (env::var("EMAIL_USERNAME"), env::var("EMAIL_PASSWORD")) {
-        (Ok(username), Ok(password)) => Some(EmailInformation { username, password }),
+    match (
+        env::var("EMAIL_ADDRESS"),
+        env::var("EMAIL_USERNAME"),
+        env::var("EMAIL_PASSWORD"),
+    ) {
+        (Ok(address), Ok(username), Ok(password)) => Some(EmailInformation {
+            address,
+            username,
+            password,
+        }),
         _ => None,
     }
 }
-async fn send_email(message: &Message, email_information: EmailInformation) -> SmtpResult {
-    let email = EmailBuilder::new()
-        .to("davidgmorillop@gmail.com")
-        .from((&email_information.username, &message.name))
-        .subject(&format!("Email from `{}`", message.email))
-        .text(&message.message)
-        .build()
-        .unwrap()
-        .into();
+async fn send_email(
+    message: &Message,
+    email_information: EmailInformation,
+) -> Result<SmtpResponse, SmtpError> {
+    let email = SmtpMessage::builder()
+        .to(email_information.address.parse().unwrap())
+        .from(Mailbox::new(
+            Some(message.name.clone()),
+            email_information.username.parse().unwrap(),
+        ))
+        .subject(format!("Email from `{}`", message.email))
+        .header(ContentType::TEXT_PLAIN)
+        .body(message.message.clone())
+        .expect("Parsing failed");
 
     let creds = Credentials::new(email_information.username, email_information.password);
 
-    let mut mailer = SmtpTransport::new(
-        SmtpClient::new_simple("smtp.eu.mailgun.org")
-            .unwrap()
-            .credentials(creds),
-    );
-    mailer.send(email)
+    let mailer = SmtpTransport::relay("smtp.eu.mailgun.org")
+        .unwrap()
+        .credentials(creds)
+        .build();
+
+    mailer.send(&email)
 }
 
 async fn contact(info: web::Json<Message>) -> impl Responder {
